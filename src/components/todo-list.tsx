@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../store/store";
 import { Button, Flex, Table, Tag } from 'antd';
 import type { TableProps } from 'antd';
-import { removeTodo } from "../store/reducers/todoSlice";
+import { editTodo, removeTodo } from "../store/reducers/todoSlice";
 
 interface DataType {
     id: number;
@@ -10,10 +10,9 @@ interface DataType {
     createAt: string;
     status: 'ToDo' | 'In process' | 'Done',
 }
-const ToDoList = () => {
+const ToDoList: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
     const columns: TableProps<DataType>['columns'] = [
-
         {
             title: 'Task Name',
             dataIndex: 'todoName',
@@ -43,8 +42,6 @@ const ToDoList = () => {
                         {status}
                     </Tag >
                 );
-
-
             },
         },
 
@@ -53,13 +50,13 @@ const ToDoList = () => {
             key: 'action',
             render: (_, record) => (
                 <Flex gap="middle" >
-                    {/* <Button color="primary" variant="outlined" onClick={() => dispatch(editTodo(record.id))}>
+                    <Button color="primary" variant="outlined" onClick={() => dispatch(editTodo({ id: record.id, todoName: record.todoName }))}>
                         Edit
-                    </Button> */}
-                    <Button danger onClick={() => dispatch(removeTodo(record.id))}>
+                    </Button>
+                    <Button danger onClick={() => dispatch(removeTodo({ id: record.id }))}>
                         Delete
                     </Button>
-                </Flex>
+                </Flex >
 
             ),
         },
@@ -67,7 +64,7 @@ const ToDoList = () => {
     // ดึง state จาก store โดยเลือกเฉพาะ state.todos ออกมา
     const todos = useSelector((state: RootState) => state.todosReducer.todos)
     return (<>
-        <Table<DataType> columns={columns} dataSource={todos} />;
+        <Table<DataType> columns={columns} dataSource={todos} />
     </>)
 }
 

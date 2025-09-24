@@ -29,6 +29,7 @@ const todoSlice = createSlice({
     // reducer functions ใช้เปลี่ยน state
     reducers:{
         // เพิ่ม
+        //PayloadAction = บอกว่า payload ของ action นี้มีอะไรบ้าง
        addTodo: (state,action: PayloadAction<{todoName: string; status: 'ToDo'|'In process'|'Done'}>
            ) => {
             const newTodo: Todo = {
@@ -38,21 +39,22 @@ const todoSlice = createSlice({
                 status: action.payload.status,
                 createAt: new Date().toDateString()
             }
-            state.todos.push(newTodo);
+            state.todos.unshift(newTodo);
        },
         // ลบ
-       removeTodo: (state,action: PayloadAction<number>) => {
-        state.todos = state.todos.filter((todo)=> todo.id != action.payload);
+       removeTodo: (state,action: PayloadAction<{id: number}>) => {
+        state.todos = state.todos.filter((todo)=> todo.id !== action.payload.id);
        },
         // แก้ไข
-    //    editTodo: (state,action: PayloadAction<number>) => {
-    //     const todo = state.todos.find((todo)=> todo.id == action.payload); 
-    //     if (todo){
-           
-    //             }
-    //    }
+       editTodo: (state,action: PayloadAction<{id: number; todoName: string;}>
+       ) => {
+      const todoEdit = state.todos.find((todo)=> todo.id === action.payload.id); 
+      if(todoEdit){
+        todoEdit.todoName = action.payload.todoName;
+      }
+    }
     }
 }
 );
-export const {addTodo, removeTodo} = todoSlice.actions;
+export const {addTodo, removeTodo,editTodo} = todoSlice.actions;
 export default todoSlice.reducer;
