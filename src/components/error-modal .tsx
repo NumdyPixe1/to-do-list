@@ -6,7 +6,7 @@ const UnreachableContext = createContext<string | null>(null);
 
 
 const config = {
-    title: 'Use Hook!',
+    title: 'Error!',
     content: (
         <>
             <ReachableContext.Consumer>{(name) => `Reachable: ${name}!`}</ReachableContext.Consumer>
